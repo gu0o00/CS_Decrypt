@@ -2,21 +2,23 @@
 Beacon元数据
 '''
 import hashlib
-import M2Crypto
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_v1_5 as PKCS1_cipher
 import base64
 import hexdump
 
-PRIVATE_KEY = """
------BEGIN RSA PRIVATE KEY-----
-{}
+pri_key = """-----BEGIN RSA PRIVATE KEY-----
+
 -----END RSA PRIVATE KEY-----
 """
 
-encode_data = ""
-base64_key = ""
+encode_data = """
 
-pubkey = M2Crypto.RSA.load_key_string(PRIVATE_KEY.format(base64_key).encode())
-ciphertext = pubkey.private_decrypt(base64.b64decode(encode_data), M2Crypto.RSA.pkcs1_padding)
+"""
+
+pri_key = RSA.importKey(pri_key)
+cipher = PKCS1_cipher.new(pri_key)
+ciphertext = cipher.decrypt(base64.b64decode(encode_data), 0)
 
 
 def isFlag(var, flag):
